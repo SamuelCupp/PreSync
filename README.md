@@ -18,7 +18,6 @@ III. Internal Functions
  
   V. Applying Boundary Conditions: Special Cases
 
-                   --------------------------------
                 I. Step-By-Step Thorn Update Procedure
                    --------------------------------
 
@@ -53,8 +52,6 @@ III. Internal Functions
    the write. The opposite case is not true - a function which reads and writes
    a variable will not give an error if WRITES is present but READS is not.
 
-
-                   --------------------------------
                        II. PreSync with Fortran
                    --------------------------------
 
@@ -75,7 +72,6 @@ Once the code compiles successfully, revert the macro and argument list to the
 original form and compile again. Eventually, full Fortran compatibility will
 be added, but this method is functional in the interim.
 
-                   --------------------------------
                        III. Internal Functions
                    --------------------------------
 
@@ -113,7 +109,6 @@ However, these methods will not catch the case where a read is not needed. For
 that problem, the only solution currently is to manually verify the read/write
 declarations are correct.
 
-                   --------------------------------
                   IV. Registering Boundary Functions
                    --------------------------------
 
@@ -145,7 +140,6 @@ all BC registrations.
 
       Boundary_RegisterPhysicalBC --> Carpet_RegisterPhysicalBC
 
-                   --------------------------------
                  V. Boundary Conditions: Special Cases
                    --------------------------------
 
