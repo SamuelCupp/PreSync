@@ -9,9 +9,13 @@ updating an existing thorn to use the new mechanisms in PreSync. This document
 consists of the following sections:
 
   I. Basic Step-by-Step Update Procedure
+  
  II. PreSync With Fortran
+ 
 III. Internal Functions
+
  IV. Registering Boundary Functions
+ 
   V. Applying Boundary Conditions: Special Cases
 
                    --------------------------------
