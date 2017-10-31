@@ -9,16 +9,14 @@ updating an existing thorn to use the new mechanisms in PreSync. This document
 consists of the following sections:
 
   I. Basic Step-by-Step Update Procedure
-  
  II. PreSync With Fortran
- 
 III. Internal Functions
-
  IV. Registering Boundary Functions
- 
   V. Applying Boundary Conditions: Special Cases
 
+               ----------------------------------------
                 I. Step-By-Step Thorn Update Procedure
+               ----------------------------------------
 
 1) Anything which has Boundary in the interface.ccl (via Requires, Inherits,
    Shares, etc.) should be changed to need Boundary2. The changes could be
@@ -56,7 +54,9 @@ III. Internal Functions
    the write. The opposite case is not true - a function which reads and writes
    a variable will not give an error if WRITES is present but READS is not.
 
+               ----------------------------------------
                        II. PreSync with Fortran
+               ----------------------------------------
 
 Currently, the new macros are not usable with Fortran code. However, they can
 still be used to check read/write declarations. As with C code, use the new macro
@@ -75,7 +75,9 @@ Once the code compiles successfully, revert the macro and argument list to the
 original form and compile again. Eventually, full Fortran compatibility will
 be added, but this method is functional in the interim.
 
+               ----------------------------------------
                        III. Internal Functions
+               ----------------------------------------
 
 Internal functions can greatly complicate the read/write declarations, as
 their usage of variables will not trigger a compiler error in the scheduled
@@ -111,7 +113,9 @@ However, these methods will not catch the case where a read is not needed. For
 that problem, the only solution currently is to manually verify the read/write
 declarations are correct.
 
+               ----------------------------------------
                   IV. Registering Boundary Functions
+               ----------------------------------------
 
 Physical boundary conditions (like those in the Boundary thorn) should be
 registered with PreSync using the function RegisterPhysicalBC. Previously,
@@ -139,7 +143,9 @@ Periodic_PresyncRegister calls the registration function. It is scheduled in
 Boundary2_Registration. This GROUP is scheduled by Boundary2 and should contain
 all BC registrations.
 
+               ----------------------------------------
                  V. Boundary Conditions: Special Cases
+               ----------------------------------------
 
 In some circumstances, boundary conditions or synchronization may need to be
 applied manually. This should be avoided and only used if absolutely necessary.
