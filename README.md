@@ -19,7 +19,6 @@ III. Internal Functions
   V. Applying Boundary Conditions: Special Cases
 
                 I. Step-By-Step Thorn Update Procedure
-                   --------------------------------
 
 1) Anything which has Boundary in the interface.ccl (via Requires, Inherits,
    Shares, etc.) should be changed to need Boundary2. The changes could be
