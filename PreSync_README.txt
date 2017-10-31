@@ -1,0 +1,163 @@
+PreSync update for Cactus
+Arrangement Authors     : Steve Brandt, Samuel Cupp
+--------------------------------------------------------------------------
+
+Presync now handles synchronization and boundary condition registration and
+application from within Carpet. This is done by declaring reads/writes for
+each function in the schedule.ccl. This document explains the process of
+updating an existing thorn to use the new mechanisms in PreSync. This document
+consists of the following sections:
+
+  I. Basic Step-by-Step Update Procedure
+ II. PreSync With Fortran
+III. Internal Functions
+ IV. Registering Boundary Functions
+  V. Applying Boundary Conditions: Special Cases
+
+                   --------------------------------
+                I. Step-By-Step Thorn Update Procedure
+                   --------------------------------
+
+1) Anything which has Boundary in the interface.ccl (via Requires, Inherits,
+   Shares, etc.) should be changed to need Boundary2. The changes could be
+   migrated to Boundary, but they are currently in a different thorn.
+
+2) Previously, a BC was selected for a variable by calling Boundary_SelectGroupForBC
+   or Boundary_SelectVarForBC. To use PreSync, these are simply changed to
+   Carpet_SelectGroupForBC and Carpet_SelectVarForBC. Functions which call
+   these functions should be scheduled in the GROUP Boundary2_Selection. The
+   USE statement in the interface.ccl also needs to be changed. Simply put,
+   the replacements below should be applied everywhere in the thorn.
+      Boundary_SelectGroupForBCs --> Carpet_SelectGroupForBCs
+      Boundary_SelectVarForBCs   --> Carpet_SelectVarForBCs
+
+3) Functions which select BCs are no longer scheduled in the GROUPs provided
+   by Boundary. Instead, they are only scheduled in the GROUP Boundary2_Selection,
+   which is provided by Boundary2.
+
+4) All scheduled functions have new macros. Change DECLARE_CCTK_ARGUMENTS to
+   DECLARE_CCTK_ARGUMENTS_[FUNCTION NAME] (ex. DECLARE_CCTK_ARGUMENTS_func1).
+   The header file cctk_Arguments_[Thorn Name].h also needs to be included.
+   This will only allow access to those variables with read/write declarations.
+   Any variables used but not declared will result in a compiler error. For
+   Fortran code, please see the next section.
+
+5) Compile errors will appear file-by-file. Each function must have the correct
+   read/write declarations before the compiler will go to the next file. Since
+   the given line is the variable's first appearance, it is usually clear if
+   the variable is read or written. In addition, read-only variables are declared
+   const, so a variable which is read and written will give another error for
+   the write. The opposite case is not true - a function which reads and writes
+   a variable will not give an error if WRITES is present but READS is not.
+
+
+                   --------------------------------
+                       II. PreSync with Fortran
+                   --------------------------------
+
+Currently, the new macros are not usable with Fortran code. However, they can
+still be used to check read/write declarations. As with C code, use the new macro
+and header file. The argument list of the function must also be changed from
+CCTK_ARGUMENTS to CCTK_ARGUMENTS_[FUNCTION NAME]. The argument list results in an
+argument passing error at runtime, but the read/write errors at compile time are
+still accessible.
+
+Unfortunately, the compiler (combined with preprocessing) does not provide
+the errors in a useful form. Many errors will appear which are caused by the many
+undeclared variables. The only errors of interest are implicit variable errors.
+The line of code must be found for each error, as it prints out the wrong line
+with the error. Otherwise, the process is the same as with C code.
+
+Once the code compiles successfully, revert the macro and argument list to the
+original form and compile again. Eventually, full Fortran compatibility will
+be added, but this method is functional in the interim.
+
+                   --------------------------------
+                       III. Internal Functions
+                   --------------------------------
+
+Internal functions can greatly complicate the read/write declarations, as
+their usage of variables will not trigger a compiler error in the scheduled
+function. This generally manifests in two ways. Either the function uses
+variables not declared at all by the parent function, or the it uses a variable
+in such a way as to change the needed declarations. The second is less clear
+without an example. Let Fun1 be a scheduled function, and Fun2 be an internal
+function called at the beginning of Fun1. After following the usual procedure,
+Fun1 reads and writes var1 in its schedule. However, Fun2 only writes var1.
+Then, Fun2 writes var1 before Fun1 reads it. Therefore, the read is not needed.
+
+The best way to handle internal functions is to include the macro of a scheduled
+function. If the function is only called by one scheduled funciton, then simply
+use that macro. If called by several, there are several options.
+
+First, the macro of one can be included for debugging, and any read/write
+declarations resulting from the internal function are added to all scheduled
+functions which use it.To be certain that nothing was missed, this may require
+recompiling using the macro of each scheduled function. While tedious, this
+will work.
+
+Alternatively, the function can be scheduled nowhere. That is, adding something
+of the form
+        schedule FunctionName
+        {
+        LANG: C
+        }  ""
+to the schedule.ccl will result in a macro being generated for this function.
+After determining the read/write declarations for the internal function, they
+can be copied into all the scheduled functions which call this internal function.
+
+However, these methods will not catch the case where a read is not needed. For
+that problem, the only solution currently is to manually verify the read/write
+declarations are correct.
+
+                   --------------------------------
+                  IV. Registering Boundary Functions
+                   --------------------------------
+
+Physical boundary conditions (like those in the Boundary thorn) should be
+registered with PreSync using the function RegisterPhysicalBC. Previously,
+functions which applied BCs which were not in Boundary were handled inside
+the thorn. This should no longer be the preferred method. Any physical BCs
+should be registered with PreSync and handled by its methods.
+
+Symmetry BCs (which are registered with SymBase) should also be registered
+with PreSync. However, they are still registered with SymBase. PreSync simply
+determines when these functions should be run. The Symmetry boundary conditions
+use the function RegisterSymmetryBC. Eventually, these functions will be provided
+via interface.ccl, but they are currently available by including the PreSync.h
+header file. This file is in the flesh, so any thorn can access it.
+
+To see an example of how to use these features, see CactusNumerical/Periodic.
+
+Periodic.h includes PreSync.h and a prototype for the registered function.
+Boundary2 thorn has a similar header file, but it includes a prototype for
+every BC it contains.
+
+Register.cc includes the registration functions. For symmetry functions like
+Periodic, the function is also registered with SymBase. Periodic_SymbaseRegister
+is unchanged, simply renamed to clarify which registration function it is.
+Periodic_PresyncRegister calls the registration function. It is scheduled in
+Boundary2_Registration. This GROUP is scheduled by Boundary2 and should contain
+all BC registrations.
+
+      Boundary_RegisterPhysicalBC --> Carpet_RegisterPhysicalBC
+
+                   --------------------------------
+                 V. Boundary Conditions: Special Cases
+                   --------------------------------
+
+In some circumstances, boundary conditions or synchronization may need to be
+applied manually. This should be avoided and only used if absolutely necessary.
+As an example, the variable cXt1 in ML_BSSN is only written, never read. It is
+output as a check, but never used in any calculations. Because of this, it will
+never trigger synchronization or application of boundary conditions. Thus, the
+CarpetIOASCII thorn must be changed to handle it internally. This amounts to
+checking each output variable for its valid region.
+
+Any function which uses this must include PreSync.h to have access to the
+definitions inside. Then, Carpet_GetValidRegion is called to determine
+the valid regions. If it returns WH_INTERIOR, then a synchronization is needed.
+Carpet_ManualSyncGF is called to do this, and then Carpet_SetValidRegion
+is called with where_spec WH_EVERYWHERE to set the new region validity.
+A USE statement for these three functions should be added to the interface.ccl
+if they are used.
