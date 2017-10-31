@@ -52,7 +52,6 @@ III. Internal Functions
    a variable will not give an error if WRITES is present but READS is not.
 
                        II. PreSync with Fortran
-                   --------------------------------
 
 Currently, the new macros are not usable with Fortran code. However, they can
 still be used to check read/write declarations. As with C code, use the new macro
@@ -72,7 +71,6 @@ original form and compile again. Eventually, full Fortran compatibility will
 be added, but this method is functional in the interim.
 
                        III. Internal Functions
-                   --------------------------------
 
 Internal functions can greatly complicate the read/write declarations, as
 their usage of variables will not trigger a compiler error in the scheduled
@@ -109,7 +107,6 @@ that problem, the only solution currently is to manually verify the read/write
 declarations are correct.
 
                   IV. Registering Boundary Functions
-                   --------------------------------
 
 Physical boundary conditions (like those in the Boundary thorn) should be
 registered with PreSync using the function RegisterPhysicalBC. Previously,
@@ -136,11 +133,9 @@ is unchanged, simply renamed to clarify which registration function it is.
 Periodic_PresyncRegister calls the registration function. It is scheduled in
 Boundary2_Registration. This GROUP is scheduled by Boundary2 and should contain
 all BC registrations.
-
       Boundary_RegisterPhysicalBC --> Carpet_RegisterPhysicalBC
 
                  V. Boundary Conditions: Special Cases
-                   --------------------------------
 
 In some circumstances, boundary conditions or synchronization may need to be
 applied manually. This should be avoided and only used if absolutely necessary.
