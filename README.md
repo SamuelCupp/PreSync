@@ -133,7 +133,6 @@ is unchanged, simply renamed to clarify which registration function it is.
 Periodic_PresyncRegister calls the registration function. It is scheduled in
 Boundary2_Registration. This GROUP is scheduled by Boundary2 and should contain
 all BC registrations.
-      Boundary_RegisterPhysicalBC --> Carpet_RegisterPhysicalBC
 
                  V. Boundary Conditions: Special Cases
 
