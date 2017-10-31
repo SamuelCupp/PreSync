@@ -41,7 +41,12 @@ III. Internal Functions
    DECLARE_CCTK_ARGUMENTS_FunctionName. The header file cctk_Arguments_ThornName.h
    also needs to be included. This will only allow access to those variables with
    read/write declarations. Any variables used but not declared will result in a
-   compiler error. For Fortran code, please see the next section.
+   compiler error. Please note that the macro will use the function name in the
+   schedule.ccl. While Cactus is case-insensitive, the C preprocessor is not.
+   Therefore, the macro will take the case of the name in the schedule.ccl in the
+   event that it differs from the case in the actual code. For this reason, it is
+   recommended that the two match in case to prevent an easily missable cause
+   for compilation failure. For Fortran code, please see the next section.
 
 5) Compile errors will appear file-by-file. Each function must have the correct
    read/write declarations before the compiler will go to the next file. Since
