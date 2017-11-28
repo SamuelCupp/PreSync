@@ -45,6 +45,7 @@
 !CHECKOUT =
 CactusBase/CartGrid3D
 CactusBase/CoordBase
+CactusBase/Fortran
 CactusBase/InitBase
 CactusBase/IOASCII
 CactusBase/IOBasic
@@ -60,6 +61,7 @@ CactusBase/Time
 !REPO_BRANCH = $BRANCH
 !CHECKOUT =
 CactusNumerical/Dissipation
+CactusNumerical/InterpToArray
 CactusNumerical/LocalReduce
 CactusNumerical/MoL
 CactusNumerical/Periodic
@@ -69,7 +71,6 @@ CactusNumerical/SpaceMask
 CactusNumerical/SphericalSurface
 CactusNumerical/SummationByParts
 CactusNumerical/TensorTypes
-CactusNumerical/TestLocalReduce
 
 # CactusUtils thorns
 !TARGET   = $ARR
@@ -80,6 +81,7 @@ CactusNumerical/TestLocalReduce
 !CHECKOUT =
 CactusUtils/Formaline
 CactusUtils/NaNChecker
+CactusUtils/SystemStatistics
 CactusUtils/TerminationTrigger
 CactusUtils/TimerReport
 CactusUtils/Vectors
@@ -96,6 +98,7 @@ EinsteinBase/ADMCoupling
 EinsteinBase/ADMMacros
 EinsteinBase/Constants
 EinsteinBase/CoordGauge
+EinsteinBase/EOS_Base
 EinsteinBase/HydroBase
 EinsteinBase/StaticConformal
 EinsteinBase/TmunuBase
@@ -107,7 +110,9 @@ EinsteinBase/TmunuBase
 !REPO_PATH= $2
 !REPO_BRANCH = $BRANCH
 !CHECKOUT =
+EinsteinEOS/EOS_IdealFluid
 EinsteinEOS/EOS_Omni
+EinsteinEOS/EOS_Polytrope
 
 # EinsteinEvolve
 !TARGET   = $ARR
