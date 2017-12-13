@@ -13,6 +13,7 @@ consists of the following sections:
 III. Internal Functions
  IV. Registering Boundary Functions
   V. Applying Boundary Conditions: Special Cases
+ VI. Generation of New Macros: rdwr.pl
 
                ----------------------------------------
                 I. Step-By-Step Thorn Update Procedure
@@ -162,3 +163,43 @@ Carpet_ManualSyncGF is called to do this, and then Carpet_SetValidRegion
 is called with where_spec WH_EVERYWHERE to set the new region validity.
 A USE statement for these three functions should be added to the interface.ccl
 if they are used.
+
+
+               ----------------------------------------
+                VI. 
+               ----------------------------------------
+
+This section discusses the new Perl script which creates the macros accompanying
+the Presync update. The file rdwr.pl in the flesh parses the interface.ccl and
+schedule.ccl to create these macros. The top-level subroutine GenerateArguments
+is called in the CST and handles all the internal subroutine calls.
+
+The subroutine interface_starter is called first. It uses do_interfaces to parse
+the interface.ccl. For every thorn, it builds a hash table containing all the
+variables provided by that thorn, including private variables. It also stores all
+necessary information on the group, such as timelevels, vector length, etc. The hash
+table is stored by $hash -> {$ImplementationName} -> {$GroupName} -> {$VariableName}.
+In addition, a list of variables is stored in $hash -> {$ImplementationName} ->
+{variable_list}, as the rd/wr declarations in the schedule.ccl do not include
+the group name.
+
+The schedule_starter is called next. It uses do_schedules to parse the schedule.ccl.
+This generates the hash table $reads_writes, which stores whether a variable is read
+or written by each function. In the event that reads and writes are different for one
+function at different places in the schedule.ccl, the macro will take a union of the
+reads/writes during this process. The value of $reads_writes -> {$FunctionName} ->
+{$ThornName} -> {$VariableName} is 0 if read-only, and 1 if it is written. The
+function language is stored in $reads_writes -> {$FunctionName} -> {language}.
+
+The schedule_starter then calls create_macros. This generates the macros
+DECLARE_CCTK_ARGUMENTS_$FunctionName and CCTK_ARGUMENTS_$FunctionName. For each
+variable in the $reads_writes table, it looks up the variable in the $hash table's
+variable list using the thorn and variable name in the schedule ccl. Also, the given
+variable name is checked for _p, as this represents a past timelevel and needs to be
+handled differently. To properly match the scheduled thorn::variable, three different
+cases must be considered. The most likely is an implementation name followed by a
+variable name. If this isn't found in the interface data, it then tries to use the
+current thorn's thorn name. This is because private variables are accessed in Cactus
+via thorn name, not implementation name. If this isn't found, it checks to see if the
+variable name given is actually a group name. This sets the $var_group variable to
+the group name. 

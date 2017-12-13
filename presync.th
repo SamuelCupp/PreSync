@@ -121,7 +121,6 @@ EinsteinEOS/EOS_Polytrope
 !REPO_PATH= $2
 !REPO_BRANCH = $BRANCH
 !CHECKOUT =
-EinsteinEvolve/GRHydro
 EinsteinEvolve/NewRad
 
 # EinsteinInitialData
