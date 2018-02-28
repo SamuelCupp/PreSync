@@ -95,12 +95,12 @@ CactusBase/Time
 #DISABLED CactusExamples/HelloWorldOpenCL
 CactusExamples/IDWaveMoL
 #CactusExamples/Poisson
-#CactusExamples/SampleBoundary
+#CactusExamples/SampleBoundary -> All tests use Pugh
 #CactusExamples/SampleIO
 #CactusExamples/TimerInfo
 CactusExamples/WaveMoL
-#CactusExamples/WaveToy1DF77
-#CactusExamples/WaveToy2DF77
+#CactusExamples/WaveToy1DF77 -> All tests use Pugh
+#CactusExamples/WaveToy2DF77 -> All tests use Pugh
 #DISABLED CactusExamples/WaveToyOpenCL
 
 ## CactusIO thorns
@@ -193,19 +193,19 @@ CactusUtils/TimerReport
 CactusUtils/Vectors
 #CactusUtils/WatchDog
 
-## CactusWave thorns
-#!TARGET   = $ARR
-#!TYPE     = git
-#!URL      = https://bitbucket.org/cactuscode/cactuswave.git
-#!REPO_PATH= $2
-#!REPO_BRANCH = $BRANCH
-#!CHECKOUT =
+# CactusWave thorns
+!TARGET   = $ARR
+!TYPE     = git
+!URL      = https://bitbucket.org/cactuscode/cactuswave.git
+!REPO_PATH= $2
+!REPO_BRANCH = $BRANCH
+!CHECKOUT =
 #CactusWave/IDScalarWave
-#CactusWave/IDScalarWaveC
+CactusWave/IDScalarWaveC
 #CactusWave/IDScalarWaveCXX
 #CactusWave/IDScalarWaveElliptic
 #CactusWave/WaveBinarySource
-#CactusWave/WaveToyC
+CactusWave/WaveToyC
 #CactusWave/WaveToyCXX
 #CactusWave/WaveToyExtra
 #CactusWave/WaveToyF77
@@ -329,19 +329,19 @@ Carpet/CarpetProlongateTest
 Carpet/CarpetReduce
 Carpet/CarpetRegrid
 Carpet/CarpetRegrid2
-#Carpet/CarpetRegridTest
+Carpet/CarpetRegridTest
 Carpet/CarpetSlab
 Carpet/CarpetTracker
 Carpet/CycleClock
-#Carpet/HighOrderWaveTest
+Carpet/HighOrderWaveTest
 Carpet/LoopControl
 #Carpet/PeriodicCarpet
-#Carpet/ReductionTest
-#Carpet/ReductionTest2
-#Carpet/ReductionTest3
-#Carpet/RegridSyncTest
-#Carpet/TestCarpetGridInfo
-#Carpet/TestLoopControl
+#Carpet/ReductionTest (requires GRHYDRO)
+Carpet/ReductionTest2
+Carpet/ReductionTest3
+Carpet/RegridSyncTest
+#Carpet/TestCarpetGridInfo -> contains no tests
+#Carpet/TestLoopControl -> All tests use Pugh
 Carpet/Timers
 
 # Thorns developed at the University of Catania
@@ -349,23 +349,24 @@ Carpet/Timers
 #!TYPE     = git
 #!URL      = https://bitbucket.org/eloisa/ctthorns.git
 #!REPO_PATH= $2
-#!REPO_BRANCH = $ET_RELEASE
+#!REPO_BRANCH = $BRANCH
 #!CHECKOUT =
 #CTThorns/CT_Analytic
 #CTThorns/CT_MultiLevel
 
-#!TARGET   = $ARR
-#!TYPE     = git
-#!URL      = https://github.com/barrywardell/EinsteinExact.git
-#!REPO_PATH= $2
-#!CHECKOUT = EinsteinExact/doc EinsteinExact/m EinsteinExact/tests
-#EinsteinExact/EinsteinExact_Test
-#EinsteinExact/GaugeWave
-#EinsteinExact/KerrSchild
-#EinsteinExact/Minkowski
-#EinsteinExact/ModifiedSchwarzschildBL
-#EinsteinExact/ShiftedGaugeWave
-#EinsteinExact/Vaidya2
+!TARGET   = $ARR
+!TYPE     = git
+!URL      = https://github.com/barrywardell/EinsteinExact.git
+!REPO_PATH= $2
+!REPO_BRANCH = $BRANCH
+!CHECKOUT = EinsteinExact/doc EinsteinExact/m EinsteinExact/tests
+EinsteinExact/EinsteinExact_Test
+EinsteinExact/GaugeWave
+EinsteinExact/KerrSchild
+EinsteinExact/Minkowski
+EinsteinExact/ModifiedSchwarzschildBL
+EinsteinExact/ShiftedGaugeWave
+EinsteinExact/Vaidya2
 
 # Additional Cactus thorns
 !TARGET   = $ARR
@@ -454,6 +455,7 @@ Numerical/AEILocalInterp
 #!AUTH_URL = https://bitbucket.org/llamacode/llama.git
 #!URL      = https://bitbucket.org/llamacode/llama.git
 #!REPO_PATH= $2
+#!REPO_BRANCH = $BRANCH
 #!CHECKOUT =
 #Llama/ADMDerivatives
 #Llama/Coordinates
