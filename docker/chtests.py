@@ -23,17 +23,18 @@ for f in os.listdir("arrangements"):
                     fd = open(save,"w")
                     fd.write(contents)
                     fd.close()
-                m = "T"
                 for a in sys.argv[1:]:
                     g = re.match(r'^(\s*[^=\s]*)\s*=\s*(.*\S)',a)
                     if g:
                         pat = re.compile(r'(?mi)^'+g.group(1)+r'\s*=.*')
                         if re.search(pat,contents):
                             contents = re.sub(pat,a,contents)
-                            m="M"
                         else:
                             contents += '\n'+a
-                            m ="F"
+                    elif a == "Boundary2":
+                        contents = re.sub(r'\bBoundary\b','Boundary2',contents)
+                    elif a == "Boundary":
+                        contents = re.sub(r'\bBoundary2\b','Boundary',contents)
                 fd = open(test,"w")
                 fd.write(contents)
                 fd.close()
