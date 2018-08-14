@@ -24,12 +24,12 @@ for f in os.listdir("arrangements"):
                     fd.write(contents)
                     fd.close()
                 for a in sys.argv[1:]:
-                    g = re.match(r'^(\s*[^=\s]*)\s*=\s*(.*\S)',a)
+                    g = re.match(r'^(\s*(\w+)::(\w+)*)\s*=\s*(.*\S)',a)
                     if g:
                         pat = re.compile(r'(?mi)^'+g.group(1)+r'\s*=.*')
                         if re.search(pat,contents):
                             contents = re.sub(pat,a,contents)
-                        else:
+                        elif re.search(r'\b'+g.group(2)+r'\b',contents):
                             contents += '\n'+a
                     elif a == "Boundary2":
                         contents = re.sub(r'\bBoundary\b','Boundary2',contents)
