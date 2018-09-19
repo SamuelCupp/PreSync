@@ -32,9 +32,11 @@ for f in os.listdir("arrangements"):
                         elif re.search(r'\b'+g.group(2)+r'\b',contents):
                             contents += '\n'+a
                     elif a == "Boundary2":
-                        contents = re.sub(r'\bBoundary\b','Boundary2',contents)
+                        contents = re.sub(r'\bBoundary\b','Boundary2',contents, flags=re.IGNORECASE)
+                        contents = re.sub(r'\bBoundary::radpower\b','Boundary2::radpower',contents, flags=re.IGNORECASE)
                     elif a == "Boundary":
-                        contents = re.sub(r'\bBoundary2\b','Boundary',contents)
+                        contents = re.sub(r'\bBoundary2\b','Boundary',contents, flags=re.IGNORECASE)
+                        contents = re.sub(r'\bBoundary2::radpower\b','Boundary::radpower',contents, flags=re.IGNORECASE)
                 fd = open(test,"w")
                 fd.write(contents)
                 fd.close()
