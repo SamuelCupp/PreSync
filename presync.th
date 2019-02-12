@@ -121,7 +121,7 @@ CactusIO/IOJpeg
 !TYPE     = git
 !URL      = https://bitbucket.org/cactuscode/cactusnumerical.git
 !REPO_PATH= $2
-#!REPO_BRANCH = $BRANCH
+!REPO_BRANCH = $BRANCH
 !CHECKOUT =
 CactusNumerical/Cartoon2D
 CactusNumerical/Dissipation
