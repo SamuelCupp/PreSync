@@ -242,7 +242,7 @@ CactusWave/WaveToyFreeF90
 !TYPE     = git
 !URL      = https://bitbucket.org/einsteintoolkit/einsteinanalysis.git
 !REPO_PATH= $2
-x#!REPO_BRANCH = presync2
+!REPO_BRANCH = presync2
 !CHECKOUT =
 EinsteinAnalysis/ADMAnalysis
 EinsteinAnalysis/ADMMass
