@@ -223,7 +223,7 @@ CactusUtils/WatchDog
 !TYPE     = git
 !URL      = https://bitbucket.org/cactuscode/cactuswave.git
 !REPO_PATH= $2
-#!REPO_BRANCH = $BRANCH
+!REPO_BRANCH = $BRANCH
 !CHECKOUT =
 CactusWave/IDScalarWave
 CactusWave/IDScalarWaveC
