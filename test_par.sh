@@ -10,8 +10,4 @@ for job in $(jobs -p)
 do
   wait $job
 done
-for proc in $(seq 1 $CCTK_TEST_SIZE)
-do
-  echo "PROC $proc"
-  grep 'Number failed'  test-out-$proc.txt
-done
+python trim.py $CCTK_TEST_SIZE
