@@ -3,6 +3,7 @@
 import sys
 
 procs = int(sys.argv[1])
+test = int(sys.argv[2])
 failure = ""
 
 for i in range(1,procs+1):
@@ -20,5 +21,5 @@ for i in range(1,procs+1):
                 break
             failure += x
 
-print(str(failure.count('\n'))+" tests failed:")
+print(str(failure.count('\n')) + " " + str(test) + "-processor tests failed:")
 print(failure)
