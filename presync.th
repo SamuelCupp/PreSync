@@ -530,9 +530,8 @@ Llama/WaveExtractL
 
 !TARGET  = $ARR
 !TYPE = git
-!URL = https://git.cct.lsu.edu/sbrandt/ReadWriteDiagnostics.git
+!URL = https://github.com/stevenrbrandt/ReadWriteDiagnostics.git
 !REPO_PATH=$2
 !CHECKOUT =
 ReadWriteDiagnostics/ReadWriteDiagnostic
-#ReadWriteDiagnostics/Trace
-#Examples/FunwaveSources
+ReadWriteDiagnostics/Trace
