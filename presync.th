@@ -161,6 +161,7 @@ CactusPUGH/PUGHSlab
 !TYPE     = git
 !URL      = https://bitbucket.org/cactuscode/cactuspughio.git
 !REPO_PATH= $2
+!REPO_BRANCH = $BRANCH
 !CHECKOUT =
 CactusPUGHIO/IOHDF5
 CactusPUGHIO/IOHDF5Util
