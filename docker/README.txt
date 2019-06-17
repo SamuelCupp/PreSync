@@ -11,4 +11,8 @@ To rebuild the image from scratch:
 
 To run the image:
 
-  sudo docker run -it --rm presync
+  sudo docker run -it --rm presync bash
+
+You will find out-1.txt and out-2.txt which show the results of the
+testsuites with presync enabled. In the directory "nout" you will
+find out-1.txt and out-2.txt with presync disabled.
