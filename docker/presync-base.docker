@@ -1,0 +1,13 @@
+FROM fedora
+RUN dnf install -y perl python3 curl vim which findutils python3-pip findutils which
+RUN curl -kLO https://raw.githubusercontent.com/nds-org/jupyter-et/master/et-pkg-installer.py
+RUN python3 et-pkg-installer.py 
+RUN sh install-for-cactus.sh
+RUN useradd -m etuser
+USER etuser
+WORKDIR /home/etuser
+
+# Base environment
+ENV HOME /home/etuser
+ENV USER etuser
+ENV PATH /usr/lib64/openmpi/bin:/home/etuser/bin:/home/etuser/.local/bin:/home/etuser/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin

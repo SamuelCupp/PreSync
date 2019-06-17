@@ -1,24 +1,33 @@
-FROM ubuntu
-RUN apt-get update
-RUN apt-get install -y python3 vim curl
-RUN curl -kLO https://raw.githubusercontent.com/nds-org/jupyter-et/master/et-pkg-installer.py
-RUN python3 et-pkg-installer.py
-RUN sh install-for-cactus.sh
-RUN useradd -m etuser
-USER etuser
-ENV USER etuser
-WORKDIR /home/etuser
+# Adjust parllelism
+ARG PARALLEL
+
+FROM presync-base
+RUN curl -kLO http://cct.lsu.edu/~sbrandt/env/myenv.py
+RUN python3 myenv.py
 RUN git clone https://github.com/SamuelCupp/PreSync.git
 RUN curl -kLO https://raw.githubusercontent.com/gridaphobe/CRL/ET_2018_02/GetComponents
 RUN chmod a+x GetComponents
+#ENV GIT_SSL_NO_VERIFY true
 RUN ./GetComponents --parallel PreSync/presync.th --root=Cactus
 RUN echo testme > .hostname
 WORKDIR /home/etuser/Cactus
+
+# Base environment
+ENV HOME /home/etuser
+ENV USER etuser
+ENV PATH /usr/lib64/openmpi/bin:/home/etuser/bin:/home/etuser/.local/bin:/home/etuser/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin
+
 RUN ./simfactory/bin/sim setup-silent
-RUN ./simfactory/bin/sim build -j8 --thornlist ../PreSync/presync.th
-COPY chtests.py .
-COPY runtests2.sh .
-USER root
-RUN apt-get install -y rsync
-USER etuser
-RUN ./runtests2.sh
+RUN ./simfactory/bin/sim build --mdbkey make "make -j $PARALLEL" --thornlist ../PreSync/presync.th
+ENV OMP_NUM_THREADS=2
+COPY runtests1.sh .
+RUN ./runtests1.sh
+COPY param.ccl /tmp/
+RUN cp /tmp/param.ccl src/param.ccl
+RUN touch src/param.ccl
+
+RUN make -j $PARALLEL 2>&1 | tee make.out
+RUN mkdir -p nout
+RUN mv out-*.txt nout/
+RUN rm -fr ~/simulations
+RUN ./runtests1.sh
