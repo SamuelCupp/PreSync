@@ -93,7 +93,6 @@ CactusConnect/Socket
 !TYPE     = git
 !URL      = https://bitbucket.org/cactuscode/cactuselliptic.git
 !REPO_PATH= $2
-#!REPO_BRANCH = $BRANCH
 !CHECKOUT = CactusElliptic/EllPETSc CactusElliptic/TATPETSc
 CactusElliptic/EllBase
 #DISABLED CactusElliptic/EllPETSc
@@ -128,7 +127,6 @@ CactusExamples/WaveToy2DF77
 !TYPE     = git
 !URL      = https://bitbucket.org/cactuscode/cactusio.git
 !REPO_PATH= $2
-#!REPO_BRANCH = $BRANCH
 !CHECKOUT =
 CactusIO/IOJpeg
 
@@ -357,7 +355,6 @@ EinsteinEOS/EOS_Polytrope
 !TYPE     = git
 !URL      = https://bitbucket.org/einsteintoolkit/einsteinevolve.git
 !REPO_PATH= $2
-#!REPO_BRANCH = $BRANCH
 !CHECKOUT =
 EinsteinEvolve/GRHydro
 EinsteinEvolve/GRHydro_InitData
